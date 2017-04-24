@@ -23,13 +23,8 @@
         .config(function ($routeProvider) {
             $routeProvider
                 .when('/', {
-                    templateUrl: 'views/main.html',
-                    controller: 'MainCtrl',
-                    controllerAs: 'vm'
-                })
-                .when('/about', {
-                    templateUrl: 'views/about.html',
-                    controller: 'AboutCtrl',
+                    templateUrl: 'views/agenda/agenda.html',
+                    controller: 'AgendaCtrl',
                     controllerAs: 'vm'
                 })
                 .otherwise({

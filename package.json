@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "start": "grunt serve",
-    "build": "grunt --force"
+    "build": "grunt --force",
+    "test": "grunt test --force"
   },
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",

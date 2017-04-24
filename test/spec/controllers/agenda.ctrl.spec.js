@@ -1,27 +1,27 @@
 (function () {
     'use strict';
 
-    describe('Controller: AboutCtrl', function () {
+    describe('Controller: AgendaCtrl', function () {
 
         // load the controller's module
         beforeEach(module('mudanoApp'));
 
-        var AboutCtrl,
+        var MainCtrl,
             scope;
 
         // Initialize the controller and a mock scope
         beforeEach(inject(function ($controller, $rootScope) {
             scope = $rootScope.$new();
-            AboutCtrl = $controller('AboutCtrl', {
+            MainCtrl = $controller('AgendaCtrl', {
                 $scope: scope
                 // place here mocked dependencies
             });
         }));
 
-        it('should attach a list of awesomeThings to the scope', shouldAttachListToScope);
+        it('should be true', shouldBeTrue);
 
-        function shouldAttachListToScope() {
-            expect(AboutCtrl.awesomeThings.length).toBe(3);
+        function shouldBeTrue() {
+            expect(1 == 1).toBe(true);
         }
     });
 })();

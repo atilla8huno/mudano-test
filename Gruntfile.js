@@ -53,7 +53,7 @@ module.exports = function (grunt) {
                     livereload: '<%= connect.options.livereload %>'
                 },
                 files: [
-                    '<%= appConfig.app %>/{,*/}*.html',
+                    '<%= appConfig.app %>/views/{,*/}*.html',
                     '.tmp/styles/{,*/}*.css',
                     '<%= appConfig.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]

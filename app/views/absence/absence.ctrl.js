@@ -3,10 +3,10 @@
 
     angular
         .module('mudanoApp')
-        .controller('AgendaCtrl', AgendaCtrl);
+        .controller('AbsenceCtrl', AbsenceCtrl);
 
     /** @ngInject */
-    function AgendaCtrl() {
+    function AbsenceCtrl() {
         var vm = this;
 
         vm.exibirMensagem = function exibirMensagem() {

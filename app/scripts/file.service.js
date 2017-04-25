@@ -29,7 +29,7 @@
                         return _.split(item, ',');
                     });
 
-                    var header = _.first(objects);
+                    var header = _.head(objects);
 
                     _.pull(objects, header); // remove the header line
 

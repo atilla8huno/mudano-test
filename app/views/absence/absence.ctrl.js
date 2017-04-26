@@ -12,6 +12,7 @@
 
     /** @ngInject */
     function AbsenceCtrl(FileService, AbsenceService) {
+
         var vm = this;
 
         vm.showDatePicker = false;
@@ -32,18 +33,18 @@
         }
 
         function initializeDatesToBook() {
-            vm.myDate = new Date();
+            vm.selectedDate = new Date();
 
             vm.minDate = new Date(
-                vm.myDate.getFullYear() - ONE_YEAR,
-                vm.myDate.getMonth(),
-                vm.myDate.getDate()
+                vm.selectedDate.getFullYear() - ONE_YEAR,
+                vm.selectedDate.getMonth(),
+                vm.selectedDate.getDate()
             );
 
             vm.maxDate = new Date(
-                vm.myDate.getFullYear(),
-                vm.myDate.getMonth() + THREE_MONTHS,
-                vm.myDate.getDate()
+                vm.selectedDate.getFullYear(),
+                vm.selectedDate.getMonth() + THREE_MONTHS,
+                vm.selectedDate.getDate()
             );
         }
 
@@ -67,13 +68,15 @@
         }
 
         function groupByEmployee(data) {
-            var itens = _.groupBy(data, function (item) {
+            vm.employeesBook = _.groupBy(data, function (item) {
                 return item.name;
             });
 
             vm.initials = [];
 
-            _.keys(itens).forEach(function (name) {
+            vm.books = _.keys(vm.employeesBook);
+
+            vm.books.forEach(function (name) {
                 vm.initials.push(_.reduce(_.split(name, ' '), function (a, b) {
                     return _.first(a).concat(_.first(b));
                 }));

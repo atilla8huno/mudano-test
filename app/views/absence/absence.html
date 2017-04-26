@@ -1,14 +1,60 @@
 <div class="row">
     <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
         <div class="row">
-            <div class="col-md-12" ng-click="vm.readCsvFile()">
-                Select any date under Your Availability to book absence
+            <div class="col-md-12">
+                <span ng-click="vm.selectADate()">Select any date under Your Availability to book absence</span>
+                <md-datepicker ng-model="vm.myDate"
+                               ng-show="vm.showDatePicker"
+                               md-placeholder="Enter date"
+                               md-min-date="vm.minDate"
+                               md-max-date="vm.maxDate"
+                               md-date-filter="vm.onlyWeekdaysPredicate">
+                </md-datepicker>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-12" style="border-top: solid;">
-                Filter by
+            <div class="col-md-12 line-separator">
+                <span>Filter by:</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <span>Workstream</span>
+            </div>
+            <div class="col-md-12" ng-repeat="workstream in ::vm.workstream">
+                <span ng-bind="::workstream.shortName"></span>
+                <span ng-bind="::workstream.name"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 line-separator">
+                <span>Person</span>
+            </div>
+            <div class="col-md-12">
+                <span ng-repeat="person in ::vm.initials">
+                    <span ng-bind="::person"></span>
+                </span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 line-separator">
+                <span>Information:</span>
+            </div>
+            <div class="col-md-12 lightweight-border">
+                <span>Available</span>
+            </div>
+            <div class="col-md-12 V">
+                <span>Vocation</span>
+            </div>
+            <div class="col-md-12 T">
+                <span>Training</span>
+            </div>
+            <div class="col-md-12 H">
+                <span>Public Holiday</span>
             </div>
         </div>
     </div>

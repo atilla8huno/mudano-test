@@ -18,7 +18,8 @@
             'ngResource',
             'ngRoute',
             'ngSanitize',
-            'ngMaterial'
+            'ngMaterial',
+            'mudanoDirectives'
         ])
         .config(function ($routeProvider) {
             $routeProvider

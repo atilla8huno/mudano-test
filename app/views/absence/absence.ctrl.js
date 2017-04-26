@@ -11,8 +11,7 @@
         .controller('AbsenceCtrl', AbsenceCtrl);
 
     /** @ngInject */
-    function AbsenceCtrl(FileService, AbsenceService) {
-
+    function AbsenceCtrl(FileService, DateService, AbsenceService) {
         var vm = this;
 
         vm.showDatePicker = false;
@@ -26,6 +25,7 @@
             readCsvFile();
             getWorkstream();
             initializeDatesToBook();
+            configWeekdaysToBook();
         }
 
         function selectADate() {
@@ -46,6 +46,14 @@
                 vm.selectedDate.getMonth() + THREE_MONTHS,
                 vm.selectedDate.getDate()
             );
+        }
+
+        function configWeekdaysToBook() {
+            DateService
+                .rangeOfWeekdays('2017-04-26', '2017-05-26')
+                .then(function (rangeOfDays) {
+                    vm.rangeOfDays = rangeOfDays;
+                });
         }
 
         function onlyWeekdaysPredicate(date) {

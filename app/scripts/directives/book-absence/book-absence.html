@@ -1,0 +1,37 @@
+<div class="col-md-12" ng-click="selectADate()">
+    <form name="bookForm">
+        <span ng-bind="formattedDate" ng-show="bookNewAbsence"></span>
+
+        <div class="toBook" ng-show="bookNewAbsence">
+            <div class="dayBox box-am" ng-class="boxClass">
+            </div>
+            <div class="dayBox box-pm" ng-class="boxClass">
+            </div>
+        </div>
+
+        <div ng-hide="bookNewAbsence">
+            <div class="row">
+                <md-input-container>
+                    <label>Period</label>
+                    <md-select name="favoriteColor" ng-model="period">
+                        <md-option value="AM">AM</md-option>
+                        <md-option value="PM">PM</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div class="row">
+                <md-input-container>
+                    <label>Information</label>
+                    <md-select name="favoriteColor" ng-model="mark">
+                        <md-option value="V">Vocation</md-option>
+                        <md-option value="T">Training</md-option>
+                        <md-option value="H">Public Holiday</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div class="row">
+                <md-button ng-click="bookAbsence()" class="md-primary">Book</md-button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,12 +1,12 @@
-.dayBox {
+.day-box {
     width: 25px;
     height: 20px;
     float: left;
 }
 
-.toBook {
+.to-book {
     text-align: center;
-    float: left;
+    float: right;
 }
 
 .T {

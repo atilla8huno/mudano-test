@@ -41,7 +41,7 @@
             }
 
             function getFormattedDate(scope) {
-                return moment(scope.date, 'YYYY-MM-DD').format('DD-MMM');
+                return moment(scope.date).format('DD-MMM');
             }
 
             function selectADate(scope) {

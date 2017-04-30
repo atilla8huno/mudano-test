@@ -3,6 +3,11 @@
     max-width: 50px;
 }
 
+.my-availability-line-header {
+    min-width: 175px;
+    max-width: 225px;
+}
+
 .line-separator {
     border-top: 1px solid #777777;
 }

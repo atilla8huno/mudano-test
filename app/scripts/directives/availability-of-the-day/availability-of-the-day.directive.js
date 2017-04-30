@@ -38,8 +38,8 @@
             });
 
             function bookAbsence() {
-                alert('Booking absence to ' + scope.employee + ' at ' + moment(scope.date, 'YYYY-MM-DD')
-                        .format('YYYY-MM-DD') + ' ' + scope.period);
+                alert('Booking absence to ' + scope.employee + ' at ' + moment(scope.date).format('YYYY-MM-DD')
+                    + ' ' + scope.period);
             }
 
             function getBoxClass(mark) {

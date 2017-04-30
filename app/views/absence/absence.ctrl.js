@@ -34,23 +34,15 @@
 
         function initializeDatesToBook() {
             vm.selectedDate = new Date();
-
-            vm.minDate = new Date(
-                vm.selectedDate.getFullYear() - ONE_YEAR,
-                vm.selectedDate.getMonth(),
-                vm.selectedDate.getDate()
-            );
-
-            vm.maxDate = new Date(
-                vm.selectedDate.getFullYear(),
-                vm.selectedDate.getMonth() + THREE_MONTHS,
-                vm.selectedDate.getDate()
-            );
+            vm.minDateStr = '2014-12-01';
+            vm.maxDateStr = '2014-12-31';
+            vm.minDate = moment(vm.minDateStr).toDate();
+            vm.maxDate = moment(vm.maxDateStr).toDate();
         }
 
         function configWeekdaysToBook() {
             DateService
-                .rangeOfWeekdays('2014-12-01', '2015-12-31')
+                .rangeOfWeekdays(vm.minDateStr, vm.maxDateStr)
                 .then(function (data) {
                     vm.rangeOfDates = data;
                 });
@@ -82,7 +74,10 @@
 
             vm.employees = _.keys(vm.employeesBook);
 
-            vm.employeesObj = [];
+            vm.employeesObj = [{
+                name: 'Your Availability',
+                shortName: 'Your Availability'
+            }];
 
             vm.employees.forEach(function (name) {
                 vm.employeesObj.push({
@@ -90,6 +85,8 @@
                     shortName: getShortName(name)
                 });
             });
+
+            vm.employees.unshift('Your Availability');
 
             function getShortName(name) {
                 var shortName = '';

@@ -20,8 +20,8 @@
          */
         function rangeOfWeekdays(start, end) {
             return $q(function (resolve, reject) {
-                var startDate = moment(start, 'YYYY-MM-DD'),
-                    endDate = moment(end, 'YYYY-MM-DD');
+                var startDate = moment(start),
+                    endDate = moment(end);
 
                 var currentDate = moment(startDate);
 

@@ -36,10 +36,20 @@
                     var populatedObject = [];
                     objects.forEach(function (item) {
                         var obj = _.zipObject(header, item);
+                        obj.shortName = getShortName(obj);
+
                         populatedObject.push(obj);
                     });
 
                     resolve(populatedObject);
+                }
+
+                function getShortName(obj) {
+                    var shortName = '';
+                    _.split(obj.name, ' ').forEach(function (item) {
+                        shortName = shortName + _.first(item);
+                    });
+                    return shortName;
                 }
             });
         }

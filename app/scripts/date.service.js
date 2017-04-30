@@ -23,10 +23,7 @@
                 var startDate = moment(start, 'YYYY-MM-DD'),
                     endDate = moment(end, 'YYYY-MM-DD');
 
-                console.log('>' + startDate);
-
                 var currentDate = moment(startDate);
-                console.log('>>' + currentDate);
 
                 var range = [];
 
@@ -36,7 +33,6 @@
                     }
                     currentDate = currentDate.add(ONE_DAY, 'days');
                 }
-                console.log('>>>' + range);
 
                 resolve(range);
             });

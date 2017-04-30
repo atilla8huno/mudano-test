@@ -23,7 +23,7 @@
             <div class="col-md-12">
                 <span>Workstream</span>
             </div>
-            <div class="col-md-12" ng-repeat="workstream in ::vm.workstream">
+            <div class="col-md-12" ng-repeat="workstream in ::vm.workstream track by $index">
                 <span ng-bind="::workstream.shortName"></span>
                 <span ng-bind="::workstream.name"></span>
             </div>
@@ -34,8 +34,8 @@
                 <span>Person</span>
             </div>
             <div class="col-md-12">
-                <span ng-repeat="person in ::vm.initials" class="box-separator">
-                    <span ng-bind="::person" class="lightweight-border"></span>
+                <span ng-repeat="employee in ::vm.employeesObj track by $index" class="box-separator">
+                    <span ng-bind="::employee.shortName" class="lightweight-border"></span>
                 </span>
             </div>
         </div>
@@ -61,7 +61,7 @@
 
     <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
         <div class="row">
-            <div class="col-md-12" ng-repeat="day in ::vm.rangeOfDays">
+            <div class="col-md-12" ng-repeat="day in ::vm.rangeOfDates track by $index">
                 <book-absence date="{{::day}}"></book-absence>
             </div>
         </div>
@@ -69,16 +69,26 @@
 
     <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
         <div class="row">
-            <div class="col-md-12" ng-repeat="book in ::vm.books">
-                <div ng-repeat="agenda in vm.employeesBook[book]">
-                    <availability-of-the-day employee-name="{{agenda.name}}"
-                                             employee-id="{{agenda.userid}}"
-                                             period="{{agenda.unit}}"
-                                             mark="{{agenda.value}}"
-                                             date="{{agenda.date}}">
-                    </availability-of-the-day>
-                </div>
-            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td ng-repeat="employee in ::vm.employeesObj track by $index" class="line-header">
+                            <span ng-bind="employee.shortName" title="{{employee.name}}"></span>
+                        </td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="date in ::vm.rangeOfDates track by $index">
+                        <td ng-repeat="employee in ::vm.employees track by $index">
+                            <availability-of-the-day employee="{{::employee}}"
+                                                     agenda="vm.employeesBook"
+                                                     date="{{::date}}">
+                            </availability-of-the-day>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

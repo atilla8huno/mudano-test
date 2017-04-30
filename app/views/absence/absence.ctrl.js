@@ -50,9 +50,9 @@
 
         function configWeekdaysToBook() {
             DateService
-                .rangeOfWeekdays('2017-04-26', '2017-05-26')
-                .then(function (rangeOfDays) {
-                    vm.rangeOfDays = rangeOfDays;
+                .rangeOfWeekdays('2014-12-01', '2015-12-31')
+                .then(function (data) {
+                    vm.rangeOfDates = data;
                 });
         }
 
@@ -80,17 +80,24 @@
                 return item.name;
             });
 
-            vm.initials = [];
+            vm.employees = _.keys(vm.employeesBook);
 
-            vm.books = _.keys(vm.employeesBook);
+            vm.employeesObj = [];
 
-            vm.books.forEach(function (name) {
-                vm.initials.push(_.reduce(_.split(name, ' '), function (a, b) {
-                    return _.first(a).concat(_.first(b));
-                }));
+            vm.employees.forEach(function (name) {
+                vm.employeesObj.push({
+                    name: name,
+                    shortName: getShortName(name)
+                });
             });
 
-            vm.initials = _.uniqWith(vm.initials, _.isEqual);
+            function getShortName(name) {
+                var shortName = '';
+                _.split(name, ' ').forEach(function (item) {
+                    shortName = shortName + _.first(item);
+                });
+                return shortName;
+            }
         }
     }
 })();

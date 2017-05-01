@@ -19,28 +19,23 @@
 
         function link(scope) {
             scope.agenda = scope.agenda || [];
-            scope.bookAbsence = bookAbsence;
 
-            scope.agenda[scope.employee].forEach(function (book) {
-                scope.period = book.unit;
-
-                if (book.name === scope.employee && scope.date === moment(book.date, 'DD/MM/YYYY').format('YYYY-MM-DD')) {
-                    if (book.unit === 'AM') {
-                        scope.boxClassAM = getBoxClass(book.value);
-                    } else {
-                        scope.boxClassPM = getBoxClass(book.value);
-                    }
-
-                    if (scope.boxClassAM && scope.boxClassPM) {
-                        return false;
-                    }
-                }
+            var books = _.filter(scope.agenda[scope.employee], function (book) {
+                return book.name === scope.employee && scope.date === moment(book.date, 'DD/MM/YYYY')
+                        .format('YYYY-MM-DD');
             });
 
-            function bookAbsence() {
-                alert('Booking absence to ' + scope.employee + ' at ' + moment(scope.date).format('YYYY-MM-DD')
-                    + ' ' + scope.period);
-            }
+            books.forEach(function (book) {
+                if (book.unit === 'AM') {
+                    scope.boxClassAM = getBoxClass(book.value);
+                    scope.titleAM = 'The booking of ' + book.name + ' at ' + scope.date + ' AM is about '
+                        + getAbsenceDescription(book.value);
+                } else {
+                    scope.boxClassPM = getBoxClass(book.value);
+                    scope.titlePM = 'The booking of ' + book.name + ' at ' + scope.date + ' PM is about '
+                        + getAbsenceDescription(book.value);
+                }
+            });
 
             function getBoxClass(mark) {
                 return {
@@ -48,6 +43,12 @@
                     'T': mark === 'T',
                     'H': mark === 'H'
                 };
+            }
+
+            function getAbsenceDescription(value) {
+                return value === 'V' ? 'Vocation' :
+                    value === 'T' ? 'Training' :
+                    value === 'H' ? 'Public Holiday' : 'Present';
             }
         }
     }

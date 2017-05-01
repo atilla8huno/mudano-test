@@ -2,14 +2,14 @@
     <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
         <div class="row">
             <div class="col-md-12">
-                <span ng-click="vm.selectADate()">Select any date under Your Availability to book absence</span>
-                <md-datepicker ng-model="vm.selectedDate"
-                               ng-show="vm.showDatePicker"
-                               md-placeholder="Enter date"
-                               md-min-date="vm.minDate"
-                               md-max-date="vm.maxDate"
-                               md-date-filter="vm.onlyWeekdaysPredicate">
-                </md-datepicker>
+                <span>Select any date under Your Availability to book absence</span>
+                <!--<md-datepicker ng-model="vm.selectedDate"-->
+                               <!--ng-show="vm.showDatePicker"-->
+                               <!--md-placeholder="Enter date"-->
+                               <!--md-min-date="vm.minDate"-->
+                               <!--md-max-date="vm.maxDate"-->
+                               <!--md-date-filter="vm.onlyWeekdaysPredicate">-->
+                <!--</md-datepicker>-->
             </div>
         </div>
 
@@ -65,16 +65,49 @@
                 <thead>
                     <tr>
                         <td ng-repeat="employee in ::vm.employeesObj track by $index"
-                            ng-class="{'line-header': $index > 0, 'my-availability-line-header': $index === 0 }">
+                            ng-class="{'line-header text-center': $index > 0, 'my-availability-line-header': $index === 0 }">
                             <span ng-bind="::employee.shortName" title="{{::employee.name}}"></span>
+
+                            <div ng-if="$index === 0 && vm.selected.length > 0">
+                                <md-input-container>
+                                    <label>Period</label>
+                                    <md-select name="period" ng-model="vm.selectedPeriod">
+                                        <md-option value="F" selected>Full time</md-option>
+                                        <md-option value="AM">AM</md-option>
+                                        <md-option value="PM">PM</md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <br/>
+                                <md-input-container>
+                                    <label>Information</label>
+                                    <md-select name="information" ng-model="vm.selectedInformation">
+                                        <md-option value="P" selected>Present</md-option>
+                                        <md-option value="T">Training</md-option>
+                                        <md-option value="V">Vocation</md-option>
+                                        <md-option value="H">Public Holiday</md-option>
+                                    </md-select>
+                                </md-input-container>
+
+                                <md-button ng-click="vm.bookAbsence()">Book</md-button>
+                            </div>
                         </td>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr ng-repeat="date in ::vm.rangeOfDates track by $index">
-                        <td ng-repeat="day in ::vm.rangeOfDates track by $index" ng-if="::$index === 0">
-                            <book-absence date="{{::date}}"></book-absence>
+                    <tr ng-repeat="date in vm.rangeOfDates track by $index">
+                        <td ng-repeat="day in vm.rangeOfDates track by $index" ng-if="::$index === 0">
+                            <md-checkbox ng-checked="vm.exists(date)"
+                                         class="seletec-date to-left"
+                                         aria-label="Select to book"
+                                         ng-click="vm.toggle(date)">
+                                <span ng-bind="date | date:'dd-MMM'"></span>
+                            </md-checkbox>
+
+                            <availability-of-the-day employee="Átilla Barros"
+                                                     agenda="vm.myBook"
+                                                     date="{{::date}}">
+                            </availability-of-the-day>
                         </td>
                         <td ng-repeat="employee in ::vm.employees track by $index" ng-if="::$index > 0">
                             <availability-of-the-day employee="{{::employee}}"

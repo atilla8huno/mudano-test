@@ -4,7 +4,8 @@
     var SUNDAY = 0,
         SATURDAY = 6,
         ONE_YEAR,
-        THREE_MONTHS = 3;
+        THREE_MONTHS = 3,
+        LOCAL_STORAGE_BOOKING = 'booking-absence';
 
     angular
         .module('mudanoApp')
@@ -14,10 +15,12 @@
     function AbsenceCtrl(FileService, DateService, AbsenceService) {
         var vm = this;
 
-        vm.showDatePicker = false;
+        vm.selectedPeriod = null;
+        vm.selectedInformation = null;
 
-        vm.onlyWeekdaysPredicate = onlyWeekdaysPredicate;
-        vm.selectADate = selectADate;
+        vm.bookAbsence = bookAbsence;
+        vm.toggle = toggle;
+        vm.exists = exists;
 
         onInit();
 
@@ -28,12 +31,75 @@
             configWeekdaysToBook();
         }
 
-        function selectADate() {
-            vm.showDatePicker = !vm.showDatePicker;
+        function bookAbsence() {
+            var bookFromStorage = localStorage.getItem(LOCAL_STORAGE_BOOKING);
+            bookFromStorage = bookFromStorage ? JSON.parse(bookFromStorage) : [];
+
+            vm.selected.forEach(function (date) {
+                _.remove(bookFromStorage, function (book) {
+                    return book.date === date && book.name === 'Átilla Barros';
+                });
+
+                if (vm.selectedPeriod === 'F') {
+                    bookFromStorage.push({
+                        userid: 0,
+                        name: 'Átilla Barros',
+                        date: moment(date).format('DD/MM/YYYY'),
+                        unit: 'AM',
+                        value: vm.selectedInformation
+                    });
+
+                    bookFromStorage.push({
+                        userid: 0,
+                        name: 'Átilla Barros',
+                        date: moment(date).format('DD/MM/YYYY'),
+                        unit: 'PM',
+                        value: vm.selectedInformation
+                    });
+                } else {
+                    bookFromStorage.push({
+                        userid: 0,
+                        name: 'Átilla Barros',
+                        date: moment(date).format('DD/MM/YYYY'),
+                        unit: vm.selectedPeriod,
+                        value: vm.selectedInformation
+                    });
+                }
+            });
+
+            localStorage.clear();
+            localStorage.setItem(LOCAL_STORAGE_BOOKING, JSON.stringify(bookFromStorage));
+            vm.selected = [];
+            vm.rangeOfDates = null;
+            initializeMyBook();
+            setTimeout(configWeekdaysToBook, 1);
+        }
+
+        function initializeMyBook() {
+            var bookFromStorage = localStorage.getItem(LOCAL_STORAGE_BOOKING);
+            bookFromStorage = bookFromStorage ? JSON.parse(bookFromStorage) : [];
+
+            vm.myBook = _.groupBy(bookFromStorage, function (item) {
+                return item.name;
+            });
+        }
+
+        function toggle(item) {
+            var idx = vm.selected.indexOf(item);
+            if (idx > -1) {
+                vm.selected.splice(idx, 1);
+            } else {
+                vm.selected.push(item);
+            }
+        }
+
+        function exists(item) {
+            return vm.selected.indexOf(item) > -1;
         }
 
         function initializeDatesToBook() {
             vm.selectedDate = new Date();
+            vm.selected = [];
             vm.minDateStr = '2014-12-01';
             vm.maxDateStr = '2014-12-31';
             vm.minDate = moment(vm.minDateStr).toDate();
@@ -46,11 +112,6 @@
                 .then(function (data) {
                     vm.rangeOfDates = data;
                 });
-        }
-
-        function onlyWeekdaysPredicate(date) {
-            var day = date.getDay();
-            return day > SUNDAY && day < SATURDAY;
         }
 
         function getWorkstream() {
@@ -68,6 +129,8 @@
         }
 
         function groupByEmployee(data) {
+            initializeMyBook();
+
             vm.employeesBook = _.groupBy(data, function (item) {
                 return item.name;
             });

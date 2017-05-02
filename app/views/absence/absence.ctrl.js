@@ -1,12 +1,6 @@
 (function () {
     'use strict';
 
-    var SUNDAY = 0,
-        SATURDAY = 6,
-        ONE_YEAR,
-        THREE_MONTHS = 3,
-        LOCAL_STORAGE_BOOKING = 'booking-absence';
-
     angular
         .module('mudanoApp')
         .controller('AbsenceCtrl', AbsenceCtrl);
@@ -17,10 +11,14 @@
 
         vm.selectedPeriod = null;
         vm.selectedInformation = null;
+        vm.selectedRange = '2014-02';
+        vm.selectedDate = new Date();
+        vm.selected = [];
 
         vm.bookAbsence = bookAbsence;
         vm.toggle = toggle;
         vm.exists = exists;
+        vm.selectRangeOfDate = selectRangeOfDate;
 
         onInit();
 
@@ -34,18 +32,25 @@
             configWeekdaysToBook();
         }
 
+        function selectRangeOfDate() {
+            initializeDatesToBook();
+            afterBooking();
+        }
+
         /**
          * Books the absence in a given dates, period and information
          */
         function bookAbsence() {
             AbsenceService
                 .bookAbsence(vm.selected, vm.selectedPeriod, vm.selectedInformation)
-                .then(function () {
-                    vm.selected = [];
-                    vm.rangeOfDates = null;
-                    initializeMyBook();
-                    setTimeout(configWeekdaysToBook, 0);
-                });
+                .then(afterBooking);
+        }
+
+        function afterBooking() {
+            vm.selected = [];
+            vm.rangeOfDates = null;
+            initializeMyBook();
+            setTimeout(configWeekdaysToBook, 0);
         }
 
         /**
@@ -152,10 +157,20 @@
          * Initialize the controller's variables so the user can iteract over the page
          */
         function initializeDatesToBook() {
-            vm.selectedDate = new Date();
-            vm.selected = [];
-            vm.minDateStr = '2014-12-01';
-            vm.maxDateStr = '2014-12-31';
+            if (vm.selectedRange === '2015-02') {
+                vm.minDateStr = '2015-02-01';
+                vm.maxDateStr = '2015-02-28';
+            } else if (vm.selectedRange === '2015-04') {
+                vm.minDateStr = '2015-04-01';
+                vm.maxDateStr = '2015-04-30';
+            } else if (vm.selectedRange === '2014-11') {
+                vm.minDateStr = '2014-11-01';
+                vm.maxDateStr = '2014-11-30';
+            } else {
+                vm.minDateStr = '2014-12-01';
+                vm.maxDateStr = '2014-12-31';
+            }
+
             vm.minDate = moment(vm.minDateStr).toDate();
             vm.maxDate = moment(vm.maxDateStr).toDate();
         }

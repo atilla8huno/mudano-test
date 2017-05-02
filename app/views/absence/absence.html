@@ -3,19 +3,22 @@
         <div class="row">
             <div class="col-md-12">
                 <span>Select any date under Your Availability to book absence</span>
-                <!--<md-datepicker ng-model="vm.selectedDate"-->
-                               <!--ng-show="vm.showDatePicker"-->
-                               <!--md-placeholder="Enter date"-->
-                               <!--md-min-date="vm.minDate"-->
-                               <!--md-max-date="vm.maxDate"-->
-                               <!--md-date-filter="vm.onlyWeekdaysPredicate">-->
-                <!--</md-datepicker>-->
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12 line-separator">
                 <span>Filter by:</span>
+
+                <md-input-container>
+                    <label>Range of date</label>
+                    <md-select name="range" ng-model="vm.selectedRange" ng-change="vm.selectRangeOfDate()">
+                        <md-option value="2015-02" selected>2015 February Book</md-option>
+                        <md-option value="2015-04">2015 April Book</md-option>
+                        <md-option value="2014-11">2014 November Book</md-option>
+                        <md-option value="2014-12">2014 December Book</md-option>
+                    </md-select>
+                </md-input-container>
             </div>
         </div>
 

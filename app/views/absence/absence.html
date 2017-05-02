@@ -96,7 +96,7 @@
 
                 <tbody>
                     <tr ng-repeat="date in vm.rangeOfDates track by $index">
-                        <td ng-repeat="day in vm.rangeOfDates track by $index" ng-if="::$index === 0">
+                        <td ng-repeat="day in ::vm.rangeOfDates track by $index" ng-if="::$index === 0">
                             <md-checkbox ng-checked="vm.exists(date)"
                                          class="seletec-date to-left"
                                          aria-label="Select to book"

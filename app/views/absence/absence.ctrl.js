@@ -24,6 +24,9 @@
 
         onInit();
 
+        /**
+         * Executes initial functions of the controller
+         */
         function onInit() {
             readCsvFile();
             getWorkstream();
@@ -31,81 +34,34 @@
             configWeekdaysToBook();
         }
 
+        /**
+         * Books the absence in a given dates, period and information
+         */
         function bookAbsence() {
-            var bookFromStorage = localStorage.getItem(LOCAL_STORAGE_BOOKING);
-            bookFromStorage = bookFromStorage ? JSON.parse(bookFromStorage) : [];
-
-            vm.selected.forEach(function (date) {
-                _.remove(bookFromStorage, function (book) {
-                    return book.date === date && book.name === 'Átilla Barros';
+            AbsenceService
+                .bookAbsence(vm.selected, vm.selectedPeriod, vm.selectedInformation)
+                .then(function () {
+                    vm.selected = [];
+                    vm.rangeOfDates = null;
+                    initializeMyBook();
+                    setTimeout(configWeekdaysToBook, 0);
                 });
-
-                if (vm.selectedPeriod === 'F') {
-                    bookFromStorage.push({
-                        userid: 0,
-                        name: 'Átilla Barros',
-                        date: moment(date).format('DD/MM/YYYY'),
-                        unit: 'AM',
-                        value: vm.selectedInformation
-                    });
-
-                    bookFromStorage.push({
-                        userid: 0,
-                        name: 'Átilla Barros',
-                        date: moment(date).format('DD/MM/YYYY'),
-                        unit: 'PM',
-                        value: vm.selectedInformation
-                    });
-                } else {
-                    bookFromStorage.push({
-                        userid: 0,
-                        name: 'Átilla Barros',
-                        date: moment(date).format('DD/MM/YYYY'),
-                        unit: vm.selectedPeriod,
-                        value: vm.selectedInformation
-                    });
-                }
-            });
-
-            localStorage.clear();
-            localStorage.setItem(LOCAL_STORAGE_BOOKING, JSON.stringify(bookFromStorage));
-            vm.selected = [];
-            vm.rangeOfDates = null;
-            initializeMyBook();
-            setTimeout(configWeekdaysToBook, 1);
         }
 
+        /**
+         * Search for logged user's book
+         */
         function initializeMyBook() {
-            var bookFromStorage = localStorage.getItem(LOCAL_STORAGE_BOOKING);
-            bookFromStorage = bookFromStorage ? JSON.parse(bookFromStorage) : [];
-
-            vm.myBook = _.groupBy(bookFromStorage, function (item) {
-                return item.name;
-            });
+            AbsenceService
+                .getMyBook()
+                .then(function (data) {
+                    vm.myBook = data;
+                });
         }
 
-        function toggle(item) {
-            var idx = vm.selected.indexOf(item);
-            if (idx > -1) {
-                vm.selected.splice(idx, 1);
-            } else {
-                vm.selected.push(item);
-            }
-        }
-
-        function exists(item) {
-            return vm.selected.indexOf(item) > -1;
-        }
-
-        function initializeDatesToBook() {
-            vm.selectedDate = new Date();
-            vm.selected = [];
-            vm.minDateStr = '2014-12-01';
-            vm.maxDateStr = '2014-12-31';
-            vm.minDate = moment(vm.minDateStr).toDate();
-            vm.maxDate = moment(vm.maxDateStr).toDate();
-        }
-
+        /**
+         * Initialize a range of dates (weekdays) so the user can book an absence
+         */
         function configWeekdaysToBook() {
             DateService
                 .rangeOfWeekdays(vm.minDateStr, vm.maxDateStr)
@@ -114,6 +70,9 @@
                 });
         }
 
+        /**
+         * Search for the workstream and exibits it on the scheen
+         */
         function getWorkstream() {
             AbsenceService
                 .getWorkstream()
@@ -122,6 +81,9 @@
                 });
         }
 
+        /**
+         * Reads the simpledata and instantiate the group of controller's variables
+         */
         function readCsvFile() {
             FileService
                 .readCsvFile()
@@ -131,33 +93,71 @@
         function groupByEmployee(data) {
             initializeMyBook();
 
-            vm.employeesBook = _.groupBy(data, function (item) {
-                return item.name;
-            });
+            AbsenceService
+                .getBookFrom(data)
+                .then(function (books) {
+                    vm.employeesBook = books;
 
-            vm.employees = _.keys(vm.employeesBook);
-
-            vm.employeesObj = [{
-                name: 'Your Availability',
-                shortName: 'Your Availability'
-            }];
-
-            vm.employees.forEach(function (name) {
-                vm.employeesObj.push({
-                    name: name,
-                    shortName: getShortName(name)
+                    getEmployeesFromBook();
                 });
-            });
+        }
 
-            vm.employees.unshift('Your Availability');
+        /**
+         * Creates a list of employees
+         */
+        function getEmployeesFromBook() {
+            AbsenceService
+                .getEmployeesFromBook(vm.employeesBook)
+                .then(function (employees) {
+                    vm.employees = employees;
 
-            function getShortName(name) {
-                var shortName = '';
-                _.split(name, ' ').forEach(function (item) {
-                    shortName = shortName + _.first(item);
+                    zipEmployeeObjWithNameAndInitials();
                 });
-                return shortName;
+        }
+
+        /**
+         * Creates an array of employees with name and initials
+         */
+        function zipEmployeeObjWithNameAndInitials() {
+            AbsenceService
+                .zipEmployeeObjWithNameAndInitials(vm.employees)
+                .then(function (employeesArray) {
+                    vm.employeesObj = employeesArray;
+                });
+        }
+
+        /**
+         * Add or remove a given item in the array of dates to book
+         * @param item
+         */
+        function toggle(item) {
+            var idx = vm.selected.indexOf(item);
+            if (idx > -1) {
+                vm.selected.splice(idx, 1);
+            } else {
+                vm.selected.push(item);
             }
+        }
+
+        /**
+         * Check if a given item exists in the selected dates list
+         * @param item
+         * @returns {boolean}
+         */
+        function exists(item) {
+            return vm.selected.indexOf(item) > -1;
+        }
+
+        /**
+         * Initialize the controller's variables so the user can iteract over the page
+         */
+        function initializeDatesToBook() {
+            vm.selectedDate = new Date();
+            vm.selected = [];
+            vm.minDateStr = '2014-12-01';
+            vm.maxDateStr = '2014-12-31';
+            vm.minDate = moment(vm.minDateStr).toDate();
+            vm.maxDate = moment(vm.maxDateStr).toDate();
         }
     }
 })();

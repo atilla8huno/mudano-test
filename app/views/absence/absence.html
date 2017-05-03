@@ -2,21 +2,21 @@
     <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
         <div class="row">
             <div class="col-md-12">
-                <span>Select any date under Your Availability to book absence</span>
+                <span>Select any date under Your Availability to book absence</span><br/>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12 line-separator">
-                <span>Filter by:</span>
+                <span>Filter by:</span><br/><br/>
 
                 <md-input-container>
                     <label>Range of date</label>
                     <md-select name="range" ng-model="vm.selectedRange" ng-change="vm.selectRangeOfDate()">
-                        <md-option value="2015-02" selected>2015 February Book</md-option>
-                        <md-option value="2015-04">2015 April Book</md-option>
-                        <md-option value="2014-11">2014 November Book</md-option>
-                        <md-option value="2014-12">2014 December Book</md-option>
+                        <md-option value="2015-02-01/2015-02-28" selected>Feb, 2015</md-option>
+                        <md-option value="2015-04-01/2015-04-30">Apr, 2015</md-option>
+                        <md-option value="2014-11-01/2014-11-30">Nov, 2014</md-option>
+                        <md-option value="2014-12-01/2014-12-31">Dec, 2014</md-option>
                     </md-select>
                 </md-input-container>
             </div>
@@ -24,7 +24,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <span>Workstream</span>
+                <span>Workstream</span><br/>
             </div>
             <div class="col-md-12" ng-repeat="workstream in ::vm.workstream track by $index">
                 <span ng-bind="::workstream.shortName"></span>
@@ -34,7 +34,7 @@
 
         <div class="row">
             <div class="col-md-12 line-separator">
-                <span>Person</span>
+                <span>Person</span><br/>
             </div>
             <div class="col-md-12">
                 <span ng-repeat="employee in ::vm.employeesObj track by $index" class="box-separator">
@@ -45,7 +45,7 @@
 
         <div class="row">
             <div class="col-md-12 line-separator">
-                <span>Information:</span>
+                <span>Information:</span><br/>
             </div>
             <div class="col-md-12 lightweight-border">
                 <span>Available</span>

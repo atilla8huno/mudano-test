@@ -11,7 +11,7 @@
 
         vm.selectedPeriod = null;
         vm.selectedInformation = null;
-        vm.selectedRange = '2014-02';
+        vm.selectedRange = '2014-02-01/2014-02-28';
         vm.selectedDate = new Date();
         vm.selected = [];
 
@@ -157,19 +157,10 @@
          * Initialize the controller's variables so the user can iteract over the page
          */
         function initializeDatesToBook() {
-            if (vm.selectedRange === '2015-02') {
-                vm.minDateStr = '2015-02-01';
-                vm.maxDateStr = '2015-02-28';
-            } else if (vm.selectedRange === '2015-04') {
-                vm.minDateStr = '2015-04-01';
-                vm.maxDateStr = '2015-04-30';
-            } else if (vm.selectedRange === '2014-11') {
-                vm.minDateStr = '2014-11-01';
-                vm.maxDateStr = '2014-11-30';
-            } else {
-                vm.minDateStr = '2014-12-01';
-                vm.maxDateStr = '2014-12-31';
-            }
+            var range = vm.selectedRange.split('/');
+
+            vm.maxDateStr = range.pop();
+            vm.minDateStr = range.pop();
 
             vm.minDate = moment(vm.minDateStr).toDate();
             vm.maxDate = moment(vm.maxDateStr).toDate();

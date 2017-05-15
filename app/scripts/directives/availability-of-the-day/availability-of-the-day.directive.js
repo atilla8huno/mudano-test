@@ -5,6 +5,7 @@
         .module('mudanoDirectives')
         .directive('availabilityOfTheDay', AvailabilityOfTheDayDirective);
 
+    /** @ngInject */
     function AvailabilityOfTheDayDirective() {
         return {
             restrict: 'E',

@@ -6,7 +6,7 @@
         .controller('AbsenceCtrl', AbsenceCtrl);
 
     /** @ngInject */
-    function AbsenceCtrl(FileService, DateService, AbsenceService) {
+    function AbsenceCtrl(FileService, DateService, AbsenceService, toastr) {
         var vm = this;
 
         vm.selectedPeriod = null;

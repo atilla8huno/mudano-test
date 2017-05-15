@@ -9,7 +9,7 @@
         .service('AbsenceService', AbsenceService);
 
     /** @ngInject */
-    function AbsenceService($q) {
+    function AbsenceService($q, toastr, FileService) {
         return {
             getWorkstream: getWorkstream,
             getMyBook: getMyBook,
@@ -106,11 +106,43 @@
                     }
                 });
 
+                checkClash(datesToBook, information);
+
                 localStorage.clear();
                 localStorage.setItem(LOCAL_STORAGE_BOOKING, JSON.stringify(bookFromStorage));
 
+                toastr.success('Your availability is now scheduled!', 'Success');
+
                 resolve();
             });
+        }
+
+        function checkClash(datesToBook, information) {
+            if (information !== 'P') {
+                FileService
+                    .readCsvFile()
+                    .then(function (data) {
+                        var clashed;
+                        datesToBook.forEach(function (date) {
+                            var anotherBooks = _.filter(data, function (book) {
+                                var actualDate = moment(date);
+                                var startDate = moment(book.date, 'DD/MM/YYYY').subtract(4, 'days');
+                                var endDate = moment(book.date, 'DD/MM/YYYY').add(4, 'days');
+
+                                return actualDate.isAfter(startDate) && actualDate.isBefore(endDate);
+                            });
+
+                            if (!_.isEmpty(anotherBooks)) {
+                                clashed = true;
+                                return false;
+                            }
+                        });
+
+                        if (clashed) {
+                            toastr.warning('Your availability has clashed to another employee\'s availability', 'Warning');
+                        }
+                    });
+            }
         }
 
         /**

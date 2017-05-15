@@ -19,6 +19,7 @@
             'ngRoute',
             'ngSanitize',
             'ngMaterial',
+            'toastr',
             'mudanoDirectives'
         ])
         .config(function ($routeProvider) {
